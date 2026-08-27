@@ -32,6 +32,20 @@ html.yaq-video-fullscreen #yaq-panel {
   color: #0f0f0f;
 }
 
+#yaq-panel button.yaq-app-restore {
+  width: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  padding: 4px;
+  background: #181818;
+}
+
+#yaq-panel button.yaq-app-restore img {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+
 #yaq-panel[data-expanded="true"] {
   display: flex;
   flex-direction: column;
@@ -46,6 +60,22 @@ html.yaq-video-fullscreen #yaq-panel {
   margin-bottom: 4px;
   font-size: 14px;
   font-weight: 700;
+}
+
+#yaq-panel .yaq-list-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#yaq-panel button.yaq-list-close {
+  width: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  padding: 0;
+  font-size: 20px;
+  line-height: 30px;
 }
 
 #yaq-panel .yaq-player-head {

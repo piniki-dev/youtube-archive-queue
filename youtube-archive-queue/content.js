@@ -207,6 +207,16 @@
     return panel;
   }
 
+  function minimizeListPanel(panel) {
+    panel.dataset.kind = "list-minimized";
+    panel.classList.add("is-minimized");
+    const iconUrl = chrome.runtime.getURL("icons/icon-32.png");
+    panel.innerHTML = `<button type="button" class="yaq-restore yaq-app-restore" aria-label="Archive Queueを開く" title="Archive Queueを開く"><img src="${iconUrl}" alt=""></button>`;
+    panel.querySelector(".yaq-restore").addEventListener("click", () => {
+      void renderListPanel();
+    });
+  }
+
   function updateFullscreenState() {
     const youtubeFullscreen = Boolean(document.querySelector("ytd-watch-flexy[fullscreen]"));
     document.documentElement.classList.toggle(
@@ -322,7 +332,10 @@
     }
     const panel = createPanel("list");
     panel.innerHTML = `
-      <div class="yaq-title">Archive Queue</div>
+      <div class="yaq-list-head">
+        <div class="yaq-title">Archive Queue</div>
+        <button type="button" class="yaq-list-close" data-action="minimize-list" aria-label="閉じる" title="閉じる">×</button>
+      </div>
       <div class="yaq-status">${hasSavedQueue ? `保存済み：${saved.items.length.toLocaleString()}件` : "ライブアーカイブをキューに取り込みます"}</div>
       <label class="yaq-field">
         <span>再生順</span>
@@ -342,6 +355,7 @@
     const actions = panel.querySelector(".yaq-actions");
     const startButton = panel.querySelector('[data-action="rebuild"]');
     const orderSelect = panel.querySelector(".yaq-order");
+    panel.querySelector('[data-action="minimize-list"]').addEventListener("click", () => minimizeListPanel(panel));
     panel.querySelector('[data-action="manager"]').addEventListener("click", () => {
       void chrome.runtime.sendMessage({ type: "open-manager" });
     });
