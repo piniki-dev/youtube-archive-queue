@@ -78,6 +78,10 @@ youtube-archive-queue/
 powershell -ExecutionPolicy Bypass -File .\scripts\package-release.ps1
 ```
 
+## リリース
+
+`v*`形式のタグをプッシュすると、GitHub Actionsが構文検証、ZIP作成、GitHub Pre-releaseへの添付を自動実行します。既存タグを公開し直す場合は、Actionsの「Publish beta release」からタグを指定して手動実行できます。
+
 ## ライセンス
 
 ライセンスは未設定です。現時点では無断での再配布・改変・商用利用を許諾していません。

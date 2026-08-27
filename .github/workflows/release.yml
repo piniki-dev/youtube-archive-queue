@@ -1,0 +1,66 @@
+name: Publish beta release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "既存タグ（例: v0.5.8-beta.1）"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Resolve tag
+        id: release
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            tag="${{ inputs.tag }}"
+          else
+            tag="${GITHUB_REF_NAME}"
+          fi
+          if [[ ! "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+([.-][0-9A-Za-z.-]+)?$ ]]; then
+            echo "Invalid release tag: $tag" >&2
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "archive=youtube-archive-queue-$tag.zip" >> "$GITHUB_OUTPUT"
+
+      - name: Check out tagged source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.release.outputs.tag }}
+
+      - name: Validate extension
+        shell: bash
+        run: |
+          node --check youtube-archive-queue/background.js
+          node --check youtube-archive-queue/content.js
+          node --check youtube-archive-queue/manager.js
+          node -e 'JSON.parse(require("fs").readFileSync("youtube-archive-queue/manifest.json", "utf8"))'
+
+      - name: Build ZIP
+        shell: bash
+        run: zip -r "${{ steps.release.outputs.archive }}" youtube-archive-queue
+
+      - name: Publish GitHub pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}
+          ARCHIVE: ${{ steps.release.outputs.archive }}
+        shell: bash
+        run: |
+          notes="RELEASE_NOTES_${TAG}.md"
+          if [[ -f "$notes" ]]; then
+            gh release create "$TAG" "$ARCHIVE" --verify-tag --prerelease --title "$TAG" --notes-file "$notes"
+          else
+            gh release create "$TAG" "$ARCHIVE" --verify-tag --prerelease --title "$TAG" --generate-notes
+          fi
