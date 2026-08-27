@@ -20,7 +20,7 @@ YouTubeチャンネルの動画・ライブアーカイブ・Shortsを、チャ�
 
 ## ベータ版のインストール
 
-1. [Releases](../../releases)から`youtube-archive-queue-v0.5.8-beta.1.zip`をダウンロードする
+1. [Releases](../../releases)から最新の`youtube-archive-queue-v*.zip`をダウンロードする
 2. ZIPを任意のフォルダーへ展開する
 3. Chromeで`chrome://extensions`を開く
 4. 右上の「デベロッパー モード」を有効にする

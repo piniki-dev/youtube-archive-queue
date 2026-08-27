@@ -2,6 +2,21 @@
 
 このプロジェクトの主な変更を記録します。
 
+## [0.5.9-beta.1] - 2026-08-27
+
+公開告知に向けたベータ版です。
+
+### Added
+
+- Archive Queueの拡張機能アイコンとツールバーアイコン
+- GitHub Pagesの紹介ページ、OGP画像、favicon
+- GitHub Pages経由の新バージョン通知
+- タグから配布ZIPとGitHub Pre-releaseを作成するGitHub Actions
+
+### Changed
+
+- README、プライバシーポリシー、公開手順をGitHubベータ配布向けに更新
+
 ## [0.5.8-beta.1] - 2026-08-27
 
 初回ベータリリース。
@@ -23,4 +38,3 @@
 
 - YouTubeの画面構造変更により、動画取得処理が動作しなくなる可能性があります。
 - Chrome Web Storeからの自動更新には未対応です。
-
