@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="YouTubeの動画や配信アーカイブを、古い順・新しい順で連続再生できるChrome拡張機能。">
+  <meta name="description" content="YouTubeのライブアーカイブを、古い順・新しい順で連続再生できるChrome拡張機能。">
   <meta name="theme-color" content="#090909">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -27,13 +27,17 @@
   <header class="hero">
     <nav><strong><img src="icon.png" alt="">Archive Queue</strong><a href="https://github.com/piniki-dev/youtube-archive-queue">GitHub</a></nav>
     <div class="hero-inner"><p class="eyebrow">CHROME EXTENSION · BETA</p><h1>配信アーカイブを、<br><span>見たい順番で。</span></h1>
-      <p class="lead">YouTubeチャンネルの動画・ライブアーカイブ・Shortsをキューに保存し、古い順でも新しい順でも連続再生できます。</p>
+      <p class="lead">YouTubeチャンネルのライブアーカイブをキューに保存し、古い順でも新しい順でも連続再生できます。</p>
       <div class="actions"><a class="primary" href="https://github.com/piniki-dev/youtube-archive-queue/releases/latest">ベータ版をダウンロード</a><a href="#install">インストール方法</a></div>
     </div>
   </header>
   <main>
     <section><p class="eyebrow">FEATURES</p><h2>アーカイブ視聴に必要なものをひとつに</h2>
-      <div class="grid"><article><b>01</b><h3>古い順・新しい順</h3><p>チャンネルに並ぶ動画を取り込み、好きな順番で連続再生します。</p></article><article><b>02</b><h3>続きから再生</h3><p>動画ごとの再生位置と視聴状態をローカルに保存します。</p></article><article><b>03</b><h3>キューを管理</h3><p>検索、除外・復元、ドラッグ並べ替え、バックアップに対応しています。</p></article></div>
+      <div class="grid"><article><b>01</b><h3>古い順・新しい順</h3><p>ライブアーカイブを取り込み、好きな順番で連続再生します。</p></article><article><b>02</b><h3>続きから再生</h3><p>動画ごとの再生位置と視聴状態をローカルに保存します。</p></article><article><b>03</b><h3>キューを管理</h3><p>検索、除外・復元、ドラッグ並べ替え、バックアップに対応しています。</p></article></div>
+    </section>
+    <section class="how-to"><p class="eyebrow">HOW TO USE</p><h2>簡単な使い方</h2>
+      <ol><li>視聴したいYouTubeチャンネルのページを開く</li><li>右下のArchive Queueで「新しい順」または「古い順」を選ぶ</li><li>「ライブアーカイブを取り込む」を押す</li><li>自動で「ライブ」タブへ移動して取得し、連続再生が始まる</li></ol>
+      <p class="note">現在はライブアーカイブ専用です。動画とShortsは取り込みません。1チャンネルにつき1つのキューを保存します。</p>
     </section>
     <section id="install" class="install"><p class="eyebrow">INSTALL</p><h2>ベータ版の導入</h2>
       <ol><li>Releasesから最新版のZIPをダウンロード</li><li>ZIPを任意のフォルダーへ展開</li><li><code>chrome://extensions</code>でデベロッパーモードを有効化</li><li>「パッケージ化されていない拡張機能を読み込む」から展開先を選択</li></ol>

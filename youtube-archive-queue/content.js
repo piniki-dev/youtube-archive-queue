@@ -4,6 +4,7 @@
   const STORAGE_KEY = "youtubeArchiveQueueState";
   const SAVED_QUEUES_KEY = "youtubeArchiveSavedQueues";
   const UPDATE_REQUEST_KEY = "youtubeArchivePendingUpdate";
+  const PENDING_STREAM_IMPORT_KEY = "youtubeArchivePendingStreamImport";
   const PANEL_ID = "yaq-panel";
   const MAX_ITEMS = 10000;
   const SCROLL_DELAY_MS = 850;
@@ -44,10 +45,23 @@
     }
   }
 
-  function isChannelListPage() {
-    return /^\/(?:@[^/]+|channel\/[^/]+|c\/[^/]+|user\/[^/]+)\/(?:videos|streams|shorts)\/?$/.test(
-      location.pathname
-    );
+  function channelBasePath() {
+    return location.pathname.match(/^\/(?:@[^/]+|channel\/[^/]+|c\/[^/]+|user\/[^/]+)/)?.[0] ?? null;
+  }
+
+  function isChannelPage() {
+    return Boolean(channelBasePath());
+  }
+
+  function isStreamArchivePage() {
+    return /^\/(?:@[^/]+|channel\/[^/]+|c\/[^/]+|user\/[^/]+)\/streams\/?$/.test(location.pathname);
+  }
+
+  function openStreamsAndImport(action, sortOrder) {
+    const channelPath = channelBasePath();
+    if (!channelPath) return;
+    sessionStorage.setItem(PENDING_STREAM_IMPORT_KEY, JSON.stringify({ channelPath, action, sortOrder }));
+    location.assign(`${location.origin}${channelPath}/streams`);
   }
 
   function channelIdentity() {
@@ -294,6 +308,7 @@
   }
 
   async function renderListPanel() {
+    const onStreamsPage = isStreamArchivePage();
     const channel = channelIdentity();
     const activeState = await getState();
     const saved = (await getSavedQueue(channel)) ?? (activeState?.channel === channel ? activeState : null);
@@ -308,7 +323,7 @@
     const panel = createPanel("list");
     panel.innerHTML = `
       <div class="yaq-title">Archive Queue</div>
-      <div class="yaq-status">${hasSavedQueue ? `保存済み：${saved.items.length.toLocaleString()}件` : "チャンネルの動画をキューに取り込みます"}</div>
+      <div class="yaq-status">${hasSavedQueue ? `保存済み：${saved.items.length.toLocaleString()}件` : "ライブアーカイブをキューに取り込みます"}</div>
       <label class="yaq-field">
         <span>再生順</span>
         <select class="yaq-order">
@@ -318,7 +333,7 @@
       </label>
       <div class="yaq-actions">
         ${hasSavedQueue ? '<button type="button" class="yaq-primary" data-action="resume">続きから再生</button><button type="button" data-action="update">新着を更新</button>' : ""}
-        <button type="button" data-action="rebuild">${hasSavedQueue ? "全件を再取得" : "キューを作成して再生"}</button>
+        <button type="button" data-action="rebuild">${hasSavedQueue ? "全件を再取得" : "ライブアーカイブを取り込む"}</button>
         <button type="button" data-action="manager">管理ページ</button>
       </div>
     `;
@@ -339,6 +354,10 @@
     });
 
     panel.querySelector('[data-action="update"]')?.addEventListener("click", async (event) => {
+      if (!onStreamsPage) {
+        openStreamsAndImport("update", orderSelect.value);
+        return;
+      }
       const button = event.currentTarget;
       button.disabled = true;
       try {
@@ -365,10 +384,15 @@
     const updateRequest = (await chrome.storage.local.get(UPDATE_REQUEST_KEY))[UPDATE_REQUEST_KEY];
     if (hasSavedQueue && updateRequest?.channel === channel) {
       await chrome.storage.local.remove(UPDATE_REQUEST_KEY);
-      panel.querySelector('[data-action="update"]')?.click();
+      if (onStreamsPage) panel.querySelector('[data-action="update"]')?.click();
+      else openStreamsAndImport("update", orderSelect.value);
     }
 
     startButton.addEventListener("click", async () => {
+      if (!onStreamsPage) {
+        openStreamsAndImport("rebuild", orderSelect.value);
+        return;
+      }
       startButton.disabled = true;
       const cancelButton = document.createElement("button");
       cancelButton.type = "button";
@@ -398,6 +422,22 @@
         cancelButton.remove();
       }
     });
+
+    if (onStreamsPage) {
+      try {
+        const pending = JSON.parse(sessionStorage.getItem(PENDING_STREAM_IMPORT_KEY) || "null");
+        if (pending?.channelPath === channelBasePath()) {
+          sessionStorage.removeItem(PENDING_STREAM_IMPORT_KEY);
+          if (pending.sortOrder === "oldest" || pending.sortOrder === "newest") orderSelect.value = pending.sortOrder;
+          const actionButton = pending.action === "update"
+            ? panel.querySelector('[data-action="update"]')
+            : startButton;
+          window.setTimeout(() => actionButton?.click(), 250);
+        }
+      } catch {
+        sessionStorage.removeItem(PENDING_STREAM_IMPORT_KEY);
+      }
+    }
   }
 
   async function goToQueueIndex(index) {
@@ -1063,7 +1103,7 @@
   }
 
   async function refresh() {
-    if (isChannelListPage()) {
+    if (isChannelPage()) {
       renderListPanel();
       return;
     }

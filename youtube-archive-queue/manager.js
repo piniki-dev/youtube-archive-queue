@@ -197,7 +197,19 @@
 
   async function requestUpdate(queue) {
     await chrome.storage.local.set({ [UPDATE_KEY]: { channel: queue.channel, requestedAt: Date.now() } });
-    await chrome.tabs.create({ url: queue.sourceUrl || `https://www.youtube.com${queue.channel}/streams` });
+    let streamUrl = queue.sourceUrl || "";
+    try {
+      const parsed = new URL(streamUrl);
+      parsed.pathname = `${parsed.pathname.replace(/\/(?:videos|streams|shorts)\/?$/, "")}/streams`;
+      parsed.search = "";
+      streamUrl = parsed.href;
+    } catch {
+      const channelPath = String(queue.channel || "").startsWith("/")
+        ? queue.channel
+        : `/channel/${queue.channel}`;
+      streamUrl = `https://www.youtube.com${channelPath}/streams`;
+    }
+    await chrome.tabs.create({ url: streamUrl });
     notify("YouTubeを開いて新着を取得します");
   }
 
