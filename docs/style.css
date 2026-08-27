@@ -1,7 +1,7 @@
 :root { color-scheme: dark; font-family: Inter, "Noto Sans JP", system-ui, sans-serif; color: #f5f5f5; background: #090909; }
 * { box-sizing: border-box; } html { scroll-behavior: smooth; } body { margin: 0; } a { color: inherit; }
 .hero { min-height: 680px; padding: 0 max(24px, calc((100vw - 1120px) / 2)); background: radial-gradient(circle at 78% 30%, #431518 0, transparent 34%), linear-gradient(145deg, #151515, #090909 64%); }
-nav { display: flex; justify-content: space-between; align-items: center; padding: 26px 0; } nav a { color: #aaa; text-decoration: none; }
+nav { display: flex; justify-content: space-between; align-items: center; padding: 26px 0; } nav strong { display: flex; align-items: center; gap: 10px; } nav strong img { width: 34px; height: 34px; object-fit: contain; } nav a { color: #aaa; text-decoration: none; }
 .hero-inner { max-width: 830px; padding: 110px 0 130px; } .eyebrow { color: #ff5b5b; font-size: 12px; font-weight: 800; letter-spacing: .18em; }
 h1 { margin: 18px 0 24px; font-size: clamp(48px, 8vw, 92px); line-height: 1.05; letter-spacing: -.055em; } h1 span { color: #ff4949; }
 .lead { max-width: 700px; color: #b8b8b8; font-size: clamp(17px, 2vw, 22px); line-height: 1.8; }
