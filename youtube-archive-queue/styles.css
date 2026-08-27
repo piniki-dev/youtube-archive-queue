@@ -1,0 +1,451 @@
+#yaq-panel {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 2147483647;
+  box-sizing: border-box;
+  width: min(420px, calc(100vw - 32px));
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  background: rgba(20, 20, 20, 0.96);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  color: #fff;
+  font: 13px/1.45 Roboto, Arial, sans-serif;
+  transform-origin: right bottom;
+  transition: width 180ms ease, top 180ms ease, right 180ms ease, bottom 180ms ease, max-height 180ms ease;
+}
+
+html.yaq-video-fullscreen #yaq-panel {
+  display: none !important;
+}
+
+#yaq-panel.is-minimized {
+  width: auto;
+  padding: 6px;
+  border-radius: 24px;
+}
+
+#yaq-panel button.yaq-restore {
+  min-width: 112px;
+  background: #f2f2f2;
+  color: #0f0f0f;
+}
+
+#yaq-panel[data-expanded="true"] {
+  display: flex;
+  flex-direction: column;
+  top: 5vh;
+  right: max(20px, calc((100vw - 1000px) / 2));
+  bottom: 5vh;
+  width: min(1000px, calc(100vw - 40px));
+  max-height: 90vh;
+}
+
+#yaq-panel .yaq-title {
+  margin-bottom: 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+#yaq-panel .yaq-player-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+#yaq-panel .yaq-player-info {
+  overflow: hidden;
+  min-width: 0;
+  flex: 1;
+}
+
+#yaq-panel .yaq-player-controls {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+}
+
+#yaq-panel button.yaq-icon-button {
+  width: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 13px;
+  line-height: 32px;
+  text-align: center;
+}
+
+#yaq-panel button.yaq-icon-button svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  margin: auto;
+  fill: currentColor;
+}
+
+#yaq-panel .yaq-status {
+  color: #c7c7c7;
+}
+
+#yaq-panel .yaq-current {
+  overflow: hidden;
+  margin-top: 6px;
+  color: #fff;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#yaq-panel .yaq-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+#yaq-panel .yaq-field {
+  display: grid;
+  gap: 5px;
+  margin-top: 12px;
+  color: #c7c7c7;
+}
+
+#yaq-panel select {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid #555;
+  border-radius: 8px;
+  background: #282828;
+  color: #fff;
+  font: inherit;
+}
+
+#yaq-panel button {
+  min-height: 34px;
+  padding: 0 13px;
+  border: 0;
+  border-radius: 18px;
+  background: #3f3f3f;
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 600;
+}
+
+#yaq-panel button.yaq-primary {
+  background: #f2f2f2;
+  color: #0f0f0f;
+}
+
+#yaq-panel button:hover:not(:disabled) {
+  filter: brightness(1.15);
+}
+
+#yaq-panel button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+#yaq-panel .yaq-queue {
+  display: none;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid #444;
+}
+
+#yaq-panel .yaq-queue.is-open {
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  animation: yaq-queue-open 180ms ease-out both;
+}
+
+#yaq-panel .yaq-queue.is-open.is-closing {
+  animation: yaq-queue-close 160ms ease-in both;
+}
+
+#yaq-panel .yaq-queue-toolbar,
+#yaq-panel .yaq-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+#yaq-panel .yaq-toolbar-actions,
+#yaq-panel .yaq-queue-heading,
+#yaq-panel .yaq-queue-filters,
+#yaq-panel .yaq-bulk-actions,
+#yaq-panel .yaq-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#yaq-panel .yaq-queue-heading {
+  flex-wrap: wrap;
+}
+
+#yaq-panel .yaq-queue-order {
+  min-width: 110px;
+}
+
+#yaq-panel .yaq-bulk-actions {
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+#yaq-panel .yaq-bulk-spacer {
+  flex: 1;
+}
+
+#yaq-panel .yaq-selected-count,
+#yaq-panel .yaq-group-label,
+#yaq-panel .yaq-manager-message {
+  color: #aaa;
+}
+
+#yaq-panel .yaq-manager-message:not(:empty) {
+  margin-top: 6px;
+}
+
+#yaq-panel .yaq-queue-filters {
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+#yaq-panel .yaq-search {
+  min-width: 220px;
+  min-height: 34px;
+  flex: 1;
+  padding: 0 10px;
+  border: 1px solid #555;
+  border-radius: 8px;
+  background: #282828;
+  color: #fff;
+  font: inherit;
+}
+
+#yaq-panel .yaq-check {
+  color: #ccc;
+  white-space: nowrap;
+}
+
+#yaq-panel .yaq-queue-toolbar button,
+#yaq-panel .yaq-pager button,
+#yaq-panel .yaq-item-controls button {
+  min-height: 28px;
+  padding: 0 9px;
+  font-size: 12px;
+}
+
+#yaq-panel .yaq-queue-list {
+  overflow-y: auto;
+  min-height: 0;
+  max-height: none;
+  flex: 1;
+  margin: 9px 0;
+}
+
+#yaq-panel .yaq-queue-item {
+  display: grid;
+  grid-template-columns: 28px 24px 36px 128px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 7px;
+}
+
+#yaq-panel .yaq-queue-item.is-dragging {
+  opacity: 0.35;
+}
+
+#yaq-panel .yaq-queue-item.is-drag-over {
+  background: #444;
+  box-shadow: inset 0 2px #3ea6ff;
+}
+
+#yaq-panel .yaq-drag-handle {
+  display: grid;
+  width: 28px;
+  height: 48px;
+  place-items: center;
+  border-radius: 6px;
+  color: #aaa;
+  cursor: grab;
+  font-size: 22px;
+  user-select: none;
+}
+
+#yaq-panel .yaq-drag-handle:hover {
+  background: #444;
+  color: #fff;
+}
+
+#yaq-panel .yaq-drag-handle:active {
+  cursor: grabbing;
+}
+
+#yaq-panel .yaq-queue-item.is-watched:not(.is-current) {
+  opacity: 0.62;
+}
+
+#yaq-panel .yaq-queue-item.is-pending-delete {
+  background: #303030;
+  opacity: 0.48;
+  filter: grayscale(1);
+}
+
+#yaq-panel .yaq-queue-item.is-pending-delete .yaq-item-title {
+  text-decoration: line-through;
+}
+
+#yaq-panel .yaq-queue-item.is-current {
+  background: #343434;
+  box-shadow: inset 3px 0 #ff3d3d;
+}
+
+#yaq-panel .yaq-item-number {
+  color: #aaa;
+  text-align: right;
+}
+
+#yaq-panel .yaq-thumbnail {
+  display: block;
+  width: 128px;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  background: #333;
+  object-fit: cover;
+}
+
+#yaq-panel .yaq-thumbnail-wrap {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  width: 128px;
+  border-radius: 6px;
+}
+
+#yaq-panel .yaq-progress-bar {
+  position: absolute;
+  right: auto;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  background: #f00;
+}
+
+#yaq-panel .yaq-item-info {
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#yaq-panel button.yaq-item-title {
+  overflow: hidden;
+  min-height: 30px;
+  padding: 0 5px;
+  background: transparent;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#yaq-panel .yaq-item-meta {
+  overflow: hidden;
+  padding: 0 5px;
+  color: #aaa;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#yaq-panel .yaq-item-controls {
+  display: flex;
+  max-width: 190px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 3px;
+}
+
+#yaq-panel .yaq-page-status {
+  color: #aaa;
+  white-space: nowrap;
+}
+
+#yaq-panel .yaq-empty {
+  padding: 40px 12px;
+  color: #aaa;
+  text-align: center;
+}
+
+@keyframes yaq-queue-open {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes yaq-queue-close {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #yaq-panel {
+    transition: none;
+  }
+
+  #yaq-panel .yaq-queue.is-open,
+  #yaq-panel .yaq-queue.is-open.is-closing {
+    animation: none;
+  }
+}
+
+@media (max-width: 600px) {
+  #yaq-panel {
+    right: 12px;
+    bottom: 12px;
+  }
+
+
+  #yaq-panel[data-expanded="true"] {
+    top: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: calc(100vw - 24px);
+    max-height: calc(100vh - 24px);
+  }
+
+  #yaq-panel .yaq-queue-item {
+    grid-template-columns: 24px 22px 28px 96px minmax(0, 1fr);
+  }
+
+  #yaq-panel .yaq-thumbnail {
+    width: 96px;
+  }
+
+  #yaq-panel .yaq-thumbnail-wrap {
+    width: 96px;
+  }
+
+  #yaq-panel .yaq-item-controls {
+    grid-column: 4 / -1;
+  }
+}
