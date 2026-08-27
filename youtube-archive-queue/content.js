@@ -818,32 +818,10 @@
     panel.querySelector('[data-action="dismiss"]').addEventListener("click", () => minimizePlayerPanel(panel, state));
   }
 
-  function renderAddToQueuePanel(state) {
-    const panel = createPanel("add-to-queue");
-    panel.innerHTML = `
-      <div class="yaq-title">Archive Queue</div>
-      <div class="yaq-status">この動画は現在のキューに含まれていません</div>
-      <div class="yaq-actions">
-        <button type="button" class="yaq-primary" data-action="back-to-queue">キューに戻る</button>
-        <button type="button" data-action="close-external">閉じる</button>
-      </div>
-    `;
-    panel.querySelector('[data-action="back-to-queue"]').addEventListener("click", () => {
-      location.assign(state.items[state.index].url);
-    });
-    panel.querySelector('[data-action="close-external"]').addEventListener("click", () => panel.remove());
-  }
-
   async function renderPlayerPanel(keepListOpen = false) {
     const state = await syncCurrentVideo();
     if (!state) {
-      const activeState = await getState();
-      const currentId = videoIdFromUrl(location.href);
-      if (activeState?.active && currentId && !activeState.items.some((item) => item.id === currentId)) {
-        renderAddToQueuePanel(activeState);
-      } else {
-        document.getElementById(PANEL_ID)?.remove();
-      }
+      document.getElementById(PANEL_ID)?.remove();
       return;
     }
     const panel = createPanel("player");
